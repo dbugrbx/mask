@@ -1,5 +1,6 @@
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
+local HttpService = game:GetService("HttpService")
 local Rayfield = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 local Window = Rayfield:CreateWindow({
     Name = "Mask",
@@ -11,16 +12,8 @@ local Window = Rayfield:CreateWindow({
     ToggleUIKeybind = "M",
     DisableRayfieldPrompts = true,
     DisableBuildWarnings = false,
-    ConfigurationSaving = {
-        Enabled = true,
-        FolderName = nil,
-        FileName = "Mask"
-    },
-    Discord = {
-        Enabled = true,
-        Invite = "https://discord.gg/vVJU3bxJdJ",
-        RememberJoins = true
-    },
+    ConfigurationSaving = {Enabled = true, FolderName = nil, FileName = "Mask"},
+    Discord = {Enabled = true, Invite = "https://discord.gg/vVJU3bxJdJ", RememberJoins = true},
     KeySystem = true,
     KeySettings = {
         Title = "Mask Access Key",
@@ -32,24 +25,84 @@ local Window = Rayfield:CreateWindow({
         Key = {"januarysnow2026"}
     }
 })
+local function ToJavaScriptObjectNotation(Table)
+    local function Serialize(Value)
+        local Table = type(Value)
+        if Table == "number" or Table == "boolean" then
+            return tostring(Value)
+        elseif Table == "string" then
+			return '"' .. string.gsub(string.gsub(Value, '\\', '\\\\'), '"', '\\"') .. '"'
+        elseif Table == "table" then
+            local IsArray = true
+            local Index = 1
+            for Key in pairs(Value) do
+                if Key ~= Index then
+                    IsArray = false
+                    break
+                end
+                Index = Index + 1
+            end
+            local Items = {}
+            if IsArray then
+                for Index = 1, #Value do
+                    table.insert(Items, Serialize(Value[Index]))
+                end
+                return "[" .. table.concat(Items, ",") .. "]"
+            else
+                for Key, Value in pairs(Value) do
+                    if type(Key) ~= "number" then
+                        table.insert(items, Serialize(Key) .. ":" .. Serialize(Value))
+                    else
+                        table.insert(Items, Serialize(tostring(Key)) .. ":" .. Serialize(Value))
+                    end
+                end
+                return "{" .. table.concat(Items, ",") .. "}"
+            end
+        else
+            return "null"
+        end
+    end
+    return Serialize(Table)
+end
 local RemoteListener = Window:CreateTab("Remote Listener", "server-cog")
-local HttpService = game:GetService("HttpService")
+local RemoteOptions = {}
+local RemoteData = {}
+local RemoteOption
+local RemoteDropdown = RemoteListener:CreateDropdown({
+    Name = "Remote Events",
+    Options = RemoteOptions,
+    CurrentOption = {},
+    MultipleOptions = false,
+    Flag = "RemoteDropdown",
+    Callback = function(Selected)
+        RemoteOption = Selected[1]
+    end,
+})
+local CopyRemote = RemoteListener:CreateButton({
+    Name = "Copy Selected Remote",
+    Callback = function()
+        if RemoteOption and RemoteData[RemoteOption] then
+            setclipboard(RemoteData[RemoteOption])
+			Rayfield:Notify({
+   				Title = "Copied",
+   				Content = "Successfully Copied Remote Data",
+   				Duration = 5,
+   				Image = "clipboard",
+			})
+        end
+    end,
+})
 for _, Remote in pairs(game:GetDescendants()) do
     if Remote:IsA("RemoteEvent") then
         Remote.OnClientEvent:Connect(function(...)
             local Arguments = {...}
-            local Serialized = HttpService:JSONEncode(Arguments)
-            local Button
-            Button = RemoteListener:CreateButton({
-                Name = Remote.Name,
-                Callback = function()
-                    local OriginalName = Button.Name
-                    setclipboard(Serialized)
-                    Button:Set("Copied")
-                    task.wait(0.5)
-                    Button:Set(OriginalName)
-                end,
-            })
+            local Serialized = ToJavaScriptObjectNotation(Arguments)
+            local Name = Remote.Name
+            if not RemoteData[Name] then
+                table.insert(RemoteOptions, Name)
+                RemoteData[Name] = Serialized
+                RemoteDropdown:Refresh(RemoteOptions)
+            end
         end)
     end
 end
