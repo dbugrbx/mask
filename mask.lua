@@ -12,7 +12,7 @@ local Window = Rayfield:CreateWindow({
     ToggleUIKeybind = "M",
     DisableRayfieldPrompts = true,
     DisableBuildWarnings = false,
-    ConfigurationSaving = {Enabled = true, FolderName = nil, FileName = "Mask"},
+    ConfigurationSaving = {Enabled = false, FolderName = nil, FileName = "Mask"},
     Discord = {Enabled = true, Invite = "https://discord.gg/vVJU3bxJdJ", RememberJoins = false},
     KeySystem = true,
     KeySettings = {
