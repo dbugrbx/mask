@@ -13,7 +13,7 @@ local Window = Rayfield:CreateWindow({
     DisableRayfieldPrompts = true,
     DisableBuildWarnings = false,
     ConfigurationSaving = {Enabled = true, FolderName = nil, FileName = "Mask"},
-    Discord = {Enabled = true, Invite = "https://discord.gg/vVJU3bxJdJ", RememberJoins = true},
+    Discord = {Enabled = true, Invite = "https://discord.gg/xgkcgArxKT", RememberJoins = true},
     KeySystem = true,
     KeySettings = {
         Title = "Mask Access Key",
@@ -27,12 +27,12 @@ local Window = Rayfield:CreateWindow({
 })
 local function ToJavaScriptObjectNotation(Table)
     local function Serialize(Value)
-        local Table = type(Value)
-        if Table == "number" or Table == "boolean" then
+        local TypeOfValue = type(Value)
+        if TypeOfValue == "number" or TypeOfValue == "boolean" then
             return tostring(Value)
-        elseif Table == "string" then
-			return '"' .. string.gsub(string.gsub(Value, '\\', '\\\\'), '"', '\\"') .. '"'
-        elseif Table == "table" then
+        elseif TypeOfValue == "string" then
+            return '"' .. string.gsub(string.gsub(Value, '\\', '\\\\'), '"', '\\"') .. '"'
+        elseif TypeOfValue == "table" then
             local IsArray = true
             local Index = 1
             for Key in pairs(Value) do
@@ -49,11 +49,11 @@ local function ToJavaScriptObjectNotation(Table)
                 end
                 return "[" .. table.concat(Items, ",") .. "]"
             else
-                for Key, Value in pairs(Value) do
+                for Key, InnerValue in pairs(Value) do
                     if type(Key) ~= "number" then
-                        table.insert(items, Serialize(Key) .. ":" .. Serialize(Value))
+                        table.insert(Items, Serialize(Key) .. ":" .. Serialize(InnerValue))
                     else
-                        table.insert(Items, Serialize(tostring(Key)) .. ":" .. Serialize(Value))
+                        table.insert(Items, Serialize(tostring(Key)) .. ":" .. Serialize(InnerValue))
                     end
                 end
                 return "{" .. table.concat(Items, ",") .. "}"
