@@ -25,10 +25,8 @@ local Window = Rayfield:CreateWindow({
    	KeySettings = {
       	Title = "Mask Access Key",
       	Subtitle = "Access Key is required to continue.",
-      	Note = [[
-            Join the Inverted HQ Discord Server for the Access Key
-            https://discord.gg/xgkcgArxKT
-         ]],
+      	Note = [[Join the Inverted HQ Discord Server for the Access Key
+         https://discord.gg/xgkcgArxKT]],
       	FileName = "AccessKey",
       	SaveKey = false,
       	GrabKeyFromSite = false,
