@@ -13,7 +13,7 @@ local Window = Rayfield:CreateWindow({
     DisableRayfieldPrompts = true,
     DisableBuildWarnings = false,
     ConfigurationSaving = {Enabled = true, FolderName = nil, FileName = "Mask"},
-    Discord = {Enabled = true, Invite = "https://discord.gg/xgkcgArxKT", RememberJoins = true},
+    Discord = {Enabled = true, Invite = "https://discord.gg/vVJU3bxJdJ", RememberJoins = true},
     KeySystem = true,
     KeySettings = {
         Title = "Mask Access Key",
