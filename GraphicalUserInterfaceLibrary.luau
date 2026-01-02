@@ -1683,7 +1683,7 @@ do
 	function page:addContainer()
     	local frame = Instance.new("Frame")
     	frame.Name = "Container"
-    	frame.BackgroundTransparency = 1
+    	frame.BackgroundTransparency = 0
     	frame.Size = UDim2.new(1, 0, 1, 0)
     	frame.Parent = self.container
     	return frame
