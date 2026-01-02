@@ -731,7 +731,7 @@ do
 			Image = "rbxassetid://5028857472",
 			ImageColor3 = themes.DarkContrast,
 			ScaleType = Enum.ScaleType.Slice,
-			SliceCenter = Rect.new(6, 6, 294, 294)
+			SliceCenter = Rect.new(8, 8, 292, 292)
 		},{
 			utility:Create("TextLabel", {
 				Name = "Title",
@@ -757,7 +757,7 @@ do
 				Image = "rbxassetid://5028857472",
 				ImageColor3 = themes.LightContrast,
 				ScaleType = Enum.ScaleType.Slice,
-				SliceCenter = Rect.new(2, 2, 298, 298)
+				SliceCenter = Rect.new(7, 7, 293, 293)
 			}, {
 				utility:Create("ImageLabel", {
 					Name = "Frame",
